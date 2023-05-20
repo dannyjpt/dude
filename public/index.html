@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Temperature with Nodejs</title>
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>    <style media="screen">
+body {
+  background-color: #162239;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+    </style>
+  </head>
+  <body id="bg">
+    <a style="position: fixed; margin-top: 850px; margin-left: 90%; font-size: 12px; background: none; color:skyblue;" id="start-record-btn"><img width="32" src="microfono.png" alt=""></a>
+    <a style="position: fixed; margin-top: 850px; margin-left: 93%; font-size: 12px; background: none; color:skyblue;" id="pause-record-btn"><img width="32" src="next.png" alt=""></a>
+    <br><br>
+    <div class="containers" style="width: 94% !important; margin-left: 3%;">
+     <br>
+      <center> <img width="1100px" src="tit.PNG" alt="">
+        <select style="padding: 20px; font-size: 40px; background-color:#162239; color:white;" name="grade" id="grades">
+          <option value="1A">FIRST A</option>
+          <option value="1B">FIRST B</option>
+          <option value="1C">FIRST C</option>
+          <option value="2A">SECOND A</option>
+          <option value="2B">SECOND B</option>
+          <option value="2C">SECOND C</option>
+          <option value="3A">THIRD A</option>
+          <option value="3B">THIRD B</option>
+          <option value="3C">THIRD C</option>
+          <option value="4A">FOURTH A</option>
+          <option value="4B">FOURTH B</option>
+          <option value="4C">FOURTH C</option>
+          <option value="5A">FIFTH A</option>
+          <option value="5B">FIFTH B</option>
+          <option value="6A">SIXTH A</option>
+          <option value="6B">SIXTH B</option>
+          <option value="7A">SEVENTH A</option>
+          <option value="7B">SEVENTH B</option>
+          <option value="8A">EIGTH A</option>
+          <option value="8B">EIGTH B</option>
+          <option value="9A">NINETH A</option>
+          <option value="9B">NINETH B</option>
+          <option value="10A">TENTH A</option>
+          <option value="11A">TENTH B</option>
+          <option value="TEACHERS">TEACHERS</option>
+          <option value="PARENTS">PARENTS</option>
+        </select>
+      </center>
+      
+      <br><br><br>
+       
+      <div class="row justify-content-center">
+        <div class="col-3 lista_de_participantes" style="width: 200px;">
+          <br>
+          <div class="row chair1">
+            <div class="col-md-3 logoc1" id="lc1" style="visibility: hidden; width:75px; height: 100px; background-image: url(lc.png); background-size: cover;"></div>
+            <div class="col-md-9 can">
+              <h5 style="color: white;">CHAIR 1</h5>
+              <input type="text" id="ic1" value="NAME 1" style="text-align: center; width:100%; height: 40px; color: #162239; font-weight: bolder;">
+              <div class="color" id="cc1" style="width:100%; height: 25px; background-color: #2b3d5f;"></div>
+            </div>
+          </div>
+          <br><br><br><br><br><br><br><br><br><br><br><br>
+          <div class="row chair4">
+            <div class="col-md-3 logoc4" id="lc4" style="visibility: hidden; width:75px; height: 100px; background-image: url(lc.png); background-size: cover;"></div>
+            <div class="col-md-9 can">
+              <h5 style="color: white;">CHAIR 4</h5>
+              <input type="text" id="ic4" value="NAME 4" style="text-align: center; width:100%; height: 40px; color: #162239; font-weight: bolder;">
+              <div class="color" id="cc4" style="width:100%; height: 25px; background-color: #2b3d5f;"></div>
+            </div>
+          </div>
+        </div>    
+
+        <canvas class="col-md-4" id="canvas" width="500" height="500"></canvas>
+
+        <div class="col-3 lista_de_participantes" style="width: 200px;">
+          <br>
+          <div class="row chair2">
+            <div class="col-md-9 can">
+              <h5 style="color: white;">CHAIR 2</h5>
+              <input type="text" id="ic2" value="NAME 2" style="text-align: center; width:100%; height: 40px; color: #162239; font-weight: bolder;">
+              <div class="color" id="cc2" style="width:100%; height: 25px; background-color: #2b3d5f;"></div>
+            </div>
+            <div class="col-md-3 logoc2" id="lc2" style="visibility: hidden; width:75px; height: 100px; background-image: url(lc.png); background-size: cover;"></div>
+          </div>
+          <br><br><br><br><br><br><br><br><br><br><br><br>
+          <div class="row chair3">
+            <div class="col-md-9 can">
+              <h5 style="color: white;">CHAIR 3</h5>
+              <input type="text" id="ic3" value="NAME 3" style="text-align: center; width:100%; height: 40px; color: #162239; font-weight: bolder;">
+              <div class="color" id="cc3" style="width:100%; height: 25px; background-color: #2b3d5f;"></div>
+            </div>
+            <div class="col-md-3 logoc3" id="lc3" style="visibility: hidden; width:75px; height: 100px; background-image: url(lc.png); background-size: cover;"></div>
+          </div>
+        </div>  
+      </div>
+      
+      
+      
+ <br><br><br><br><br><br><br><br><br><br>
+      <div style="display: flex; width: 100%; height: 300px; flex-wrap: wrap;">
+         
+          <div style="width: 22%; background-color: #FFCD03; border-radius: 5px; color: black; margin-left: 2%;" id="hcarnegie">
+              <br><center><h3>Carnegie</h3></center> 
+          </div>
+          <div style="width: 22%; background-color: #03FF30; border-radius: 5px; color: black; margin-left: 2%;" id="hdisney">
+              <br><center><h3>Disney</h3></center>
+          </div>
+          <div style="width: 22%; background-color: #03DBFF; border-radius: 5px; color: black; margin-left: 2%;" id="hford">
+              <br><center><h3>Ford</h3></center>
+          </div>
+          <div style="width: 22%; background-color: #D006D9; border-radius: 5px; color: black; margin-left: 2%;" id="hjobs">
+              <br><center><h3>Jobs</h3></center>
+          </div>
+     
+      
+      </div>
+      <br><br><br><br><p></p>
+      </div>
+
+      <div id="results"></div>
+      
+
+    <script src="socket.io/socket.io.js" charset="utf-8"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=DpFKKK8g"></script>
+    <script src="voice.js" charset="utf-8"></script>
+    
+  </body>
+</html>
